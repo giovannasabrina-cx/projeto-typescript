@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Acervo — Gogroup</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul:       #2659a5;
+      --azul-dark:  #1a4280;
+      --vermelho:   #e5381a;
+      --laranja:    #eb5f48;
+      --amarelo:    #f8ae13;
+      --text:       #1a1a2e;
+      --text-muted: #6b7280;
+      --border:     #e5e7eb;
+      --bg:         #f0f4fb;
+      --grad:       linear-gradient(135deg, #1a4280 0%, #2659a5 50%, #3a74cc 100%);
+      --grad-btn:   linear-gradient(135deg, #2659a5, #e5381a);
+    }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--grad);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 20px rgba(38,89,165,0.3);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 12px; }
+
+    .logo-box {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .header-left .title { color: white; font-weight: 700; font-size: 1rem; }
+
+    .tag {
+      background: var(--vermelho);
+      color: white;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .header-right { color: rgba(255,255,255,0.75); font-size: 0.8rem; font-weight: 500; }
+
+    /* HERO */
+    .hero {
+      background: var(--grad);
+      padding: 44px 32px 60px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      top: -40%; left: -15%; width: 55%; height: 200%;
+      background: rgba(255,255,255,0.04); border-radius: 50%;
+    }
+    .hero::after {
+      content: ''; position: absolute;
+      bottom: -50%; right: -5%; width: 45%; height: 180%;
+      background: rgba(229,56,26,0.12); border-radius: 50%;
+    }
+    .hero h1 { color: white; font-size: 1.9rem; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
+    .hero h1 span { color: var(--amarelo); }
+    .hero p { color: rgba(255,255,255,0.75); font-size: 0.88rem; position: relative; z-index: 1; }
+
+    /* STATS */
+    .stats-wrap {
+      max-width: 900px;
+      margin: -28px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      position: relative; z-index: 10;
+    }
+
+    .stat-card {
+      background: white; border-radius: 14px; padding: 20px 16px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(38,89,165,0.1);
+      border-top: 4px solid transparent;
+    }
+    .stat-card:nth-child(1) { border-top-color: var(--azul); }
+    .stat-card:nth-child(2) { border-top-color: #22c55e; }
+    .stat-card:nth-child(3) { border-top-color: var(--vermelho); }
+    .stat-card .num { font-size: 2.2rem; font-weight: 800; }
+    .stat-card:nth-child(1) .num { color: var(--azul); }
+    .stat-card:nth-child(2) .num { color: #16a34a; }
+    .stat-card:nth-child(3) .num { color: var(--vermelho); }
+    .stat-card .label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* MAIN */
+    .main { max-width: 900px; margin: 32px auto; padding: 0 24px 40px; }
+
+    .card {
+      background: white; border-radius: 16px; padding: 28px; margin-bottom: 24px;
+      box-shadow: 0 2px 16px rgba(38,89,165,0.07);
+      border: 1px solid rgba(38,89,165,0.07);
+    }
+    .card.form-card   { border-top: 3px solid var(--vermelho); }
+    .card.acervo-card { border-top: 3px solid var(--azul); }
+
+    .card-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .card-title .icon { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, #dbeafe, #fef3c7); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+
+    /* FORM */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .input-group { display: flex; flex-direction: column; gap: 5px; }
+    .input-group.full { grid-column: span 2; }
+    .input-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .input-group input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: inherit; color: var(--text); transition: all 0.2s; background: #f9fafb; }
+    .input-group input:focus { outline: none; border-color: var(--azul); background: white; box-shadow: 0 0 0 3px rgba(38,89,165,0.08); }
+
+    .btn-add { width: 100%; margin-top: 16px; padding: 12px; background: var(--grad-btn); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+    .btn-add:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 18px rgba(229,56,26,0.25); }
+
+    /* SEARCH */
+    .search-wrap { position: relative; margin-bottom: 20px; }
+    .search-wrap input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.88rem; font-family: inherit; background: #f9fafb; transition: all 0.2s; }
+    .search-wrap input:focus { outline: none; border-color: var(--azul); background: white; box-shadow: 0 0 0 3px rgba(38,89,165,0.08); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+
+    /* GRID DE CARDS */
+    .livros-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
+
+    .livro-card {
+      background: white; border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(38,89,165,0.06);
+      display: flex; flex-direction: column;
+    }
+    .livro-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(38,89,165,0.14); }
+
+    .livro-capa { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(135deg, #dbeafe, #fef3c7); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .livro-capa img { width: 100%; height: 180px; object-fit: cover; }
+
+    .livro-info { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .livro-titulo-card { font-size: 0.82rem; font-weight: 700; color: var(--text); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .livro-autor-card { font-size: 0.72rem; color: var(--text-muted); }
+    .livro-ano-card { font-size: 0.7rem; color: var(--text-muted); }
+
+    .livro-badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; margin-top: 4px; width: fit-content; }
+    .badge-sim { background: #dcfce7; color: #15803d; }
+    .badge-nao { background: #fee2e2; color: #b91c1c; }
+
+    .livro-acoes { padding: 10px 12px 12px; display: flex; gap: 6px; }
+
+    .btn-acao { flex: 1; padding: 6px 4px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: inherit; text-align: center; }
+    .btn-emprestar { background: #dbeafe; color: var(--azul-dark); }
+    .btn-emprestar:hover { background: #bfdbfe; }
+    .btn-devolver  { background: #dcfce7; color: #15803d; }
+    .btn-devolver:hover { background: #bbf7d0; }
+    .btn-remover   { background: #fee2e2; color: #b91c1c; }
+    .btn-remover:hover { background: #fecaca; }
+
+    .vazio { text-align: center; padding: 48px 20px; color: var(--text-muted); grid-column: 1 / -1; }
+    .vazio .vazio-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+    .toast { position: fixed; bottom: 28px; right: 28px; background: var(--azul-dark); color: white; padding: 13px 20px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.18); transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 999; border-left: 4px solid var(--amarelo); max-width: 320px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.75rem; }
+    .footer .d1 { color: var(--azul); font-weight: 700; }
+    .footer .d2 { color: var(--vermelho); font-weight: 700; }
+
+    .capa-loading { width: 100%; height: 180px; background: linear-gradient(90deg, #f0f4fb 25%, #dbeafe 50%, #f0f4fb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.4rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .input-group.full { grid-column: span 1; }
+      .livros-grid { grid-template-columns: repeat(2, 1fr); }
+      .header { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-box">📚</div>
+      <span class="title">Acervo de Livros</span>
+      <span class="tag">Pré Claude Code</span>
+    </div>
+    <span class="header-right">gogroup · 2025</span>
+  </div>
+
+  <div class="hero">
+    <h1>Sistema de <span>Acervo</span> 📖</h1>
+    <p>Tarefa Hands-on · Pré Claude Code · Gogroup 2025</p>
+  </div>
+
+  <div class="stats-wrap">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">Total de Livros</div></div>
+    <div class="stat-card"><div class="num" id="statDisp">0</div><div class="label">Disponíveis</div></div>
+    <div class="stat-card"><div class="num" id="statEmp">0</div><div class="label">Emprestados</div></div>
+  </div>
+
+  <div class="main">
+    <div class="card form-card">
+      <div class="card-title"><div class="icon">➕</div>Adicionar Novo Livro</div>
+      <div class="form-grid">
+        <div class="input-group full"><label>Título</label><input type="text" id="titulo" placeholder="Ex: O Senhor dos Anéis" /></div>
+        <div class="input-group"><label>Autor</label><input type="text" id="autor" placeholder="Ex: J.R.R. Tolkien" /></div>
+        <div class="input-group"><label>Ano de Publicação</label><input type="number" id="ano" placeholder="Ex: 2004" /></div>
+      </div>
+      <button class="btn-add" onclick="adicionarLivro()">+ Adicionar ao Acervo</button>
+    </div>
+
+    <div class="card acervo-card">
+      <div class="card-title"><div class="icon">📋</div>Acervo Completo</div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="busca" placeholder="Buscar por título ou autor..." oninput="renderGrid()" />
+      </div>
+      <div class="livros-grid" id="livros-grid"></div>
+    </div>
+  </div>
+
+  <div class="footer">Desenvolvido por <span class="d1">Giovanna Sabrina</span> · Time CX · <span class="d2">Gogroup</span> 2025</div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let acervo = [];
+    let proximoId = 1;
+
+    const livrosIniciais = [
+      { titulo: "A Biblioteca da Meia-Noite", autor: "Matt Haig",               ano: 2020, disponivel: true  },
+      { titulo: "A Empregada",                autor: "Freida McFadden",          ano: 2022, disponivel: true  },
+      { titulo: "A Mentalidade do Fundador",  autor: "Chris Zook e James Allen", ano: 2016, disponivel: true  },
+      { titulo: "A Paciente Silenciosa",      autor: "Alex Michaelides",         ano: 2019, disponivel: false },
+    ];
+
+    livrosIniciais.forEach(l => acervo.push({ id: proximoId++, ...l }));
+
+    const gradientes = [
+      "linear-gradient(135deg, #1a4280, #2659a5)",
+      "linear-gradient(135deg, #e5381a, #f8ae13)",
+      "linear-gradient(135deg, #2659a5, #eb5f48)",
+      "linear-gradient(135deg, #eb5f48, #f8ae13)",
+      "linear-gradient(135deg, #1a4280, #e5381a)",
+    ];
+
+    function getGradiente(id) {
+      return gradientes[(id - 1) % gradientes.length];
+    }
+
+    function adicionarLivro() {
+      const titulo = document.getElementById('titulo').value.trim();
+      const autor  = document.getElementById('autor').value.trim();
+      const ano    = parseInt(document.getElementById('ano').value);
+      if (!titulo || !autor || !ano) { mostrarToast("⚠️ Preencha todos os campos!"); return; }
+      acervo.push({ id: proximoId++, titulo, autor, ano, disponivel: true });
+      document.getElementById('titulo').value = '';
+      document.getElementById('autor').value  = '';
+      document.getElementById('ano').value    = '';
+      mostrarToast(`✅ "${titulo}" adicionado!`);
+      renderGrid();
+    }
+
+    function emprestarLivro(id) {
+      const l = acervo.find(l => l.id === id);
+      if (!l || !l.disponivel) return;
+      l.disponivel = false;
+      mostrarToast(`📤 "${l.titulo}" emprestado!`);
+      renderGrid();
+    }
+
+    function devolverLivro(id) {
+      const l = acervo.find(l => l.id === id);
+      if (!l || l.disponivel) return;
+      l.disponivel = true;
+      mostrarToast(`📥 "${l.titulo}" devolvido!`);
+      renderGrid();
+    }
+
+    function removerLivro(id) {
+      const l = acervo.find(l => l.id === id);
+      if (!l) return;
+      acervo = acervo.filter(x => x.id !== id);
+      mostrarToast(`🗑️ "${l.titulo}" removido.`);
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const busca = document.getElementById('busca').value.toLowerCase();
+      const filtrado = acervo.filter(l => l.titulo.toLowerCase().includes(busca) || l.autor.toLowerCase().includes(busca));
+
+      document.getElementById('statTotal').textContent = acervo.length;
+      document.getElementById('statDisp').textContent  = acervo.filter(l => l.disponivel).length;
+      document.getElementById('statEmp').textContent   = acervo.filter(l => !l.disponivel).length;
+
+      const grid = document.getElementById('livros-grid');
+
+      if (filtrado.length === 0) {
+        grid.innerHTML = `<div class="vazio"><div class="vazio-icon">📭</div><p>Nenhum livro encontrado.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = filtrado.map(livro => `
+        <div class="livro-card">
+          <div class="livro-capa" style="background:${getGradiente(livro.id)};">
+            <span style="font-size:2.5rem;">📚</span>
+          </div>
+          <div class="livro-info">
+            <div class="livro-titulo-card">${livro.titulo}</div>
+            <div class="livro-autor-card">${livro.autor}</div>
+            <div class="livro-ano-card">${livro.ano}</div>
+            <span class="livro-badge ${livro.disponivel ? 'badge-sim' : 'badge-nao'}">
+              ${livro.disponivel ? '✓ Disponível' : '✗ Emprestado'}
+            </span>
+          </div>
+          <div class="livro-acoes">
+            ${livro.disponivel
+              ? `<button class="btn-acao btn-emprestar" onclick="emprestarLivro(${livro.id})">Emprestar</button>`
+              : `<button class="btn-acao btn-devolver"  onclick="devolverLivro(${livro.id})">Devolver</button>`}
+            <button class="btn-acao btn-remover" onclick="removerLivro(${livro.id})">Remover</button>
+          </div>
+        </div>`).join('');
+    }
+
+    function mostrarToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    renderGrid();
+  </script>
+</body>
+</html>
